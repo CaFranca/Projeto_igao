@@ -1,12 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Projeto escalável MVC </title>
-    <link rel="stylesheet" href={{url_for('static', filename='styles.css')}}>
+    <title>Projeto Escalavel</title>
+    <link rel="stylesheet" href={{url_for('static', filename='styles.css' )}}>
 </head>
+
 <body>
-    <p> Hello, user!</p>
+    <div class="container">
+        <h1>Digite aqui seu Login!</h1>
+        <form action="/" method="post">
+            <label for="Login">Login:</label>
+            <input type="text" id="login" name="login">
+
+            <label for="Senha">Senha:</label>
+            <input type="password" id="senha" name="senha">
+
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
 </body>
+
 </html>

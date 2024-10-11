@@ -1,5 +1,46 @@
-p 
-{
+body {
+    font-family: Arial, sans-serif;
+    background-color: #c5dcdf; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+.container {
+    background-color: #0288d1; 
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    color: #ffffff; 
+}
+.container h1 {
     text-align: center;
-    font-family: 'Times New Roman', Times, serif;
+    color: #ffffff;
+}
+label, input, select, button {
+    display: block;
+    width: 95%;
+    margin-bottom: 15px;
+}
+input, select {
+    padding: 10px;
+    border: 1px solid #0288d1;
+    border-radius: 5px;
+    background-color: #ffffff;
+    color: #0288d1;
+}
+button {
+    background-color: #01579b; 
+    color: #ffffff;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+button:hover {
+    background-color: #013f72; 
 }

@@ -1,12 +1,10 @@
-from flask import Flask, render_template, Blueprint
-from controller.controller import blueprint_default
+from flask import Flask
+from controller.controller import blueprint_default as pagina
+from model.model import *
 
 app = Flask(__name__)
-app.register_blueprint(blueprint_default)
-
-@app.route("/", methods=["GET"])
-def hello_world():
-    return render_template("index.html")
+app.register_blueprint(pagina)
+app.wsgi_app=MeuMiddleware(app.wsgi_app)
 
 if __name__ == "__main__":
     app.run(debug=True)
