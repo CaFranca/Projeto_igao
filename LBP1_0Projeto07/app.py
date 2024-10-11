@@ -1,8 +1,8 @@
 from flask import Flask, render_template, Blueprint
-from controller.controller import blueprint_geral
+from controller.controller import blueprint_default
 
 app = Flask(__name__)
-app.register_blueprint(blueprint_geral)
+app.register_blueprint(blueprint_default)
 
 @app.route("/", methods=["GET"])
 def hello_world():
