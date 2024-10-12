@@ -11,12 +11,12 @@
 <body>
     <div class="container">
         <h1>Digite aqui seu Login!</h1>
-        <form action="/" method="post">
-            <label for="Login">Login:</label>
-            <input type="text" id="login" name="login">
+        <form action="{{ url_for('blueprint_cool.login') }}" method="post">
+            <label for="login">Login:</label>
+            <input type="text" id="login" name="login" required>
 
-            <label for="Senha">Senha:</label>
-            <input type="password" id="senha" name="senha">
+            <label for="senha">Senha:</label>
+            <input type="password" id="senha" name="senha" required>
 
             <button type="submit">Enviar</button>
         </form>

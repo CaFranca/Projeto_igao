@@ -4,21 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projeto Escalavel</title>
-    <link rel="stylesheet" href={{url_for('static', filename='styles.css' )}}>
+    <title>Acesso Negado</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 
 <body>
     <div class="container">
         <p>
-            <center><b>Voce não esta logado!</b></center>
+            <center><b>Usuário ou senha incorretos!</b></center>
         </p>
         <br>
         <button>
-            <a href="login">fazer login</a>
+            <a href="{{ url_for('blueprint_cool.login') }}">Tentar novamente</a>
         </button>
-
-
     </div>
 </body>
 
