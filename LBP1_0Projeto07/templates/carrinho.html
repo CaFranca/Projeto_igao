@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Carrinho</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Seu Carrinho</h1>
+        <ul>
+            {% for produto_id, quantidade in carrinho.items() %}
+            <b>Produto ID: {{ produto_id }} - Quantidade: {{ quantidade }}</b><br><br>
+            {% endfor %}
+        </ul>
+        <a href="{{ url_for('blueprint_cool.produtos') }}"><button type="button">Continuar Comprando</button></a>
+        <a href="{{ url_for('blueprint_cool.logout') }}"><button type="button">Logout</button></a>
+    </div>
+</body>
+
+</html>

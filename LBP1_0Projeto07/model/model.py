@@ -9,7 +9,9 @@ class MeuMiddleware:
 
     def __call__(self, environ, start_response):
         print("Antes da Requisição")
-        return self.app(environ, start_response)
+        response = self.app(environ, start_response)
+        print("Após a Requisição")  # Logging pós-resposta
+        return response
 
 # Lista de usuários pré-definidos
 usuarios = [Usuario('admin', 'admin'), Usuario('Caique', 'aluno')]
