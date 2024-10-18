@@ -16,14 +16,14 @@ def login_required(f):
     """Decorator para verificar se o usuário está logado."""
     def wrapper(*args, **kwargs):
         if 'login' not in session:
-            return redirect(url_for('blueprint_cool.login'))  # Redireciona para a página de login
+            return redirect(url_for('blueprint_cool.login')) 
         return f(*args, **kwargs)
     wrapper.__name__ = f.__name__
     return wrapper
 
 @blueprint_default.route("/")
 def index():
-    # Redireciona para a página de login
+
     return redirect(url_for('blueprint_cool.login')) 
 
 @blueprint_default.route("/login", methods=["GET", "POST"])
@@ -32,30 +32,30 @@ def login():
         login = request.form["login"]
         senha = request.form["senha"]
 
-        # Verifica se o usuário e a senha estão corretos
+  
         for usuario in usuarios:
             if usuario.login == login and usuario.senha == senha:
                 session['login'] = login
                 session['senha'] = senha
                 
-                # Redireciona para /admin se o usuário for admin
+            
                 if login == 'admin':
                     return redirect(url_for('blueprint_cool.admin_page'))
                 
-                return redirect(url_for('blueprint_cool.home'))  # Ou para a página inicial
+                return redirect(url_for('blueprint_cool.home')) 
        
-        return render_template("erro.html")  # Renderiza a página de erro se as credenciais estiverem incorretas
+        return render_template("erro.html")  
 
-    return render_template("index.html")  # Exibe o login se o método não for POST
+    return render_template("index.html")  
 
 @blueprint_default.route('/home')
-@login_required  # Garante que apenas usuários logados possam acessar
+@login_required  
 def home():
     return "Página inicial - Bem-vindo!"
 
 @blueprint_default.route('/admin')
-@login_required  # Garante que apenas usuários logados possam acessar
+@login_required  
 def admin_page():
     if session['login'] != 'admin':
-        return redirect(url_for('blueprint_cool.index'))  # Redireciona para login se não for admin
+        return redirect(url_for('blueprint_cool.index'))  
     return "Bem-vindo à página admin!"
