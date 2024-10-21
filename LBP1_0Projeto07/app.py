@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from controller.controller import blueprint_default as pagina
 from model.model import MeuMiddleware
 
@@ -14,6 +14,25 @@ app.register_blueprint(pagina)
 
 # Registrar o middleware
 app.wsgi_app = MeuMiddleware(app.wsgi_app)
+
+# Rota para tratar erro 404
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
+@app.errorhandler(403)
+def acesso_negado(e):
+    return render_template('403.html'), 403
+
+@app.errorhandler(401)
+def nao_autorizado(e):
+    return render_template('401.html'), 401
+
+
+# Manipulador de erros genéricos
+@app.errorhandler(Exception)
+def handle_generic_error(e):
+    return render_template('erro.html', message=str(e)), 500
 
 if __name__ == "__main__":
     app.run(debug=True)

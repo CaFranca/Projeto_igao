@@ -9,7 +9,13 @@
 <body>
     <div class="container">
     <h1>404 - Página Não Encontrada</h1><br>
-    <p>Desculpe, a página que você está procurando não existe.</p>
+    {% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert-{{ category }}">{{ message }}</div><br>  <!-- Exibe a mensagem sem lista -->
+        {% endfor %}
+    {% endif %}
+{% endwith %}
     <a href="{{ url_for('blueprint_cool.index') }}"><button type="button">Voltar para a página inicial</button></a>
 </div>
 </body>

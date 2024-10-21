@@ -1,65 +1,37 @@
-from flask import Blueprint, render_template, request, session, redirect, url_for, make_response, flash
-from werkzeug.exceptions import HTTPException
-import json  # Importa o módulo JSON
+from flask import Blueprint, render_template, request, session, redirect, url_for, make_response, flash,abort
 from model.model import usuarios
-from functools import wraps
-
+import json; from functools import wraps;  from collections import defaultdict
 blueprint_default = Blueprint("blueprint_cool", __name__)
 
-# Área dos Cookies
-@blueprint_default.route('/set_cookie')
-def set_cookie():
-    resp = make_response("Cookie has been set!")
-    resp.set_cookie('username', 'Cazz', max_age=60*24)
-    return resp
-
-@blueprint_default.route('/get_cookie')
-def get_cookie():
-    username = request.cookies.get('username')
-    if username:
-        return f'The username is {username}'
-    else:
-        return 'No cookie found!'
-
-@blueprint_default.route('/delete_cookie')
-def delete_cookie():
-    resp = make_response("Cookie has been deleted!")
-    resp.set_cookie('username', '', expires=0)
-    return resp
-
-# Função para verificar se o usuário está logado
 def login_required(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
         if 'login' not in session:
-            flash('Você precisa estar logado para acessar esta página.', 'warning')  # Mensagem de aviso
-            return redirect(url_for('blueprint_cool.login'))
+            flash('Você precisa estar logado para acessar esta página.', 'warning')
+            abort(403)
+            #return redirect(url_for('blueprint_cool.login'))
         return f(*args, **kwargs)
     return wrapper
 
-# Rota para tratar erro 404
-@blueprint_default.errorhandler(404)
-def page_not_found(e):
-    return render_template('404.html'), 404
+def admin_required(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        if session.get('login') != 'admin':
+            flash('Acesso negado. Você não tem permissão para acessar esta página.', 'danger')
+            abort(401)
+            #return redirect(url_for('blueprint_cool.index'))
+        return f(*args, **kwargs)
+    return wrapper
 
-# Manipulador de erros genéricos
-@blueprint_default.errorhandler(Exception)
-def handle_generic_error(e):
-    return render_template('generic_error.html', message=str(e)), 500
-
-# Página inicial
-@blueprint_default.route("/")
-def index():
-    return redirect(url_for('blueprint_cool.login'))
-
-# Rota de login
 @blueprint_default.route("/login", methods=["GET", "POST"])
 def login():
+    # Limpa mensagens flash anteriores, se houver
+    session.pop('_flashes', None)  # Remove mensagens flash
+
     if request.method == "POST":
         login = request.form["login"]
         senha = request.form["senha"]
 
-        # Verifica credenciais
         for usuario in usuarios:
             if usuario.login == login and usuario.senha == senha:
                 session['login'] = login
@@ -69,10 +41,16 @@ def login():
 
                 return redirect(url_for('blueprint_cool.home'))
 
-        flash('Credenciais inválidas. Tente novamente.', 'danger')  # Mensagem de erro
-        return redirect(url_for('blueprint_cool.login'))  # Redireciona para a página de login
+        flash('Credenciais inválidas. Tente novamente.', 'danger')
+        return redirect(url_for('blueprint_cool.login'))
 
     return render_template("index.html")
+
+
+# Página inicial
+@blueprint_default.route("/")
+def index():
+    return redirect(url_for('blueprint_cool.login'))
 
 # Página protegida por login
 @blueprint_default.route('/home')
@@ -83,30 +61,30 @@ def home():
 # Página do administrador
 @blueprint_default.route('/admin')
 @login_required
+@admin_required  # Adicionando a verificação de administrador
 def admin_page():
-    if session['login'] != 'admin':
-        flash('Acesso negado. Você não tem permissão para acessar esta página.', 'danger')
-        return redirect(url_for('blueprint_cool.index'))
     flash('A operação foi um sucesso', 'success')
     return render_template("sucesso.html")
+
 
 # Logout
 @blueprint_default.route('/logout')
 @login_required
 def logout():
-    session.pop('login', None)  # Remove o usuário da sessão
-    flash('Você foi desconectado com sucesso!', 'info')  # Mensagem de logout
-    return redirect(url_for('blueprint_cool.login'))  # Redireciona para a página de login
+    session.pop('login', None)
+    flash('Você foi desconectado com sucesso!', 'info')
+    return redirect(url_for('blueprint_cool.login'))
 
 # Página de produtos
 @blueprint_default.route('/produtos')
 @login_required
 def produtos():
     produtos = [
-        {'id': '1', 'nome': 'Produto A', 'preco': 10.00},
-        {'id': '2', 'nome': 'Produto B', 'preco': 20.00},
-        {'id': '3', 'nome': 'Produto C', 'preco': 30.00}
+        {'id': '1', 'nome': 'NVIDIA GeForce RTX 3060', 'preco': 2499.90},
+        {'id': '2', 'nome': 'AMD Radeon RX 6700 XT', 'preco': 2999.99},
+        {'id': '3', 'nome': 'NVIDIA GeForce GTX 1660 Super', 'preco': 1799.90}
     ]
+
     return render_template("produtos.html", produtos=produtos)
 
 # Adicionar ao carrinho
@@ -114,30 +92,64 @@ def produtos():
 @login_required
 def adicionar_ao_carrinho():
     produto_id = request.form['produto_id']
-    carrinho = request.cookies.get('carrinho')
-
-    if carrinho:
-        carrinho = json.loads(carrinho)  # Converte a string JSON de volta para um dicionário
-    else:
-        carrinho = {}
-
-    if produto_id in carrinho:
-        carrinho[produto_id] += 1  # Incrementa a quantidade
-    else:
-        carrinho[produto_id] = 1  # Adiciona o produto
-
+    
+    # Recupera o carrinho do cookie e converte de volta para dicionário
+    carrinho = json.loads(request.cookies.get('carrinho', '{}'))
+    
+    # Usa defaultdict para evitar verificações manuais de existência
+    carrinho = defaultdict(int, carrinho)
+    
+    # Incrementa a quantidade do produto
+    carrinho[produto_id] += 1
+    
+    # Converte de volta para JSON e define no cookie com segurança extra
     resp = make_response(redirect(url_for('blueprint_cool.produtos')))
-    resp.set_cookie('carrinho', json.dumps(carrinho), max_age=60*60*24)  # Serializa o dicionário como JSON
+    resp.set_cookie('carrinho', json.dumps(carrinho), max_age=60*60*24, secure=True, httponly=True, samesite='Lax')  # Mais seguro
+    
     return resp
 
-# Ver carrinho
+# Remover o carrinho
+@blueprint_default.route('/remover_carrinho')
+@login_required
+def remover_carrinho():
+    resp = make_response(redirect(url_for('blueprint_cool.produtos')))
+    resp.set_cookie('carrinho', '', expires=0)  # Remove o cookie do carrinho
+    flash('O carrinho foi esvaziado com sucesso!', 'info')
+    return resp
+
+
+# Ver carrinho e calcular o total
 @blueprint_default.route('/carrinho')
 @login_required
 def ver_carrinho():
-    carrinho = request.cookies.get('carrinho')
-    if carrinho:
-        carrinho = json.loads(carrinho)  # Converte a string JSON de volta para um dicionário
-    else:
-        carrinho = {}
+    carrinho = json.loads(request.cookies.get('carrinho', '{}'))
+    total = 0
 
-    return render_template("carrinho.html", carrinho=carrinho)
+    # Lista de produtos
+    produtos = [
+        {'id': '1', 'nome': 'NVIDIA GeForce RTX 3060', 'preco': 2499.90},
+        {'id': '2', 'nome': 'AMD Radeon RX 6700 XT', 'preco': 2999.99},
+        {'id': '3', 'nome': 'NVIDIA GeForce GTX 1660 Super', 'preco': 1799.90}
+    ]
+
+    # Criar um dicionário de produtos com o id como chave
+    produtos_dict = {produto['id']: produto for produto in produtos}
+
+    # Criar uma lista com as informações dos produtos no carrinho
+    carrinho_info = []
+    for produto_id, quantidade in carrinho.items():
+        if produto_id in produtos_dict:
+            produto = produtos_dict[produto_id]
+            subtotal = produto['preco'] * quantidade
+            total += subtotal
+            carrinho_info.append({
+                'nome': produto['nome'],
+                'preco': produto['preco'],
+                'quantidade': quantidade,
+                'subtotal': round(subtotal, 2)  # Exibir subtotal com 2 casas decimais
+            })
+
+    # Exibir o total com duas casas decimais
+    total = round(total, 2)
+
+    return render_template("carrinho.html", carrinho=carrinho_info, total=total)
