@@ -25,25 +25,34 @@ def admin_required(f):
 
 @blueprint_default.route("/login", methods=["GET", "POST"])
 def login():
-    # Limpa mensagens flash anteriores, se houver
-    session.pop('_flashes', None)  # Remove mensagens flash
-
     if request.method == "POST":
         login = request.form["login"]
         senha = request.form["senha"]
 
+        usuario_encontrado = False  # Variável para verificar se o usuário existe
+
         for usuario in usuarios:
-            if usuario.login == login and usuario.senha == senha:
-                session['login'] = login
+            if usuario.login == login:  # Se o login do usuário for encontrado
+                usuario_encontrado = True  # Usuário existe
+                
+                if usuario.senha == senha:  # Verifica se a senha está correta
+                    session['login'] = login  # Armazena o login na sessão
+                    
+                    # Redireciona conforme o tipo de usuário
+                    if login == 'admin':
+                        return redirect(url_for('blueprint_cool.admin_page'))
+                    return redirect(url_for('blueprint_cool.home'))
 
-                if login == 'admin':
-                    return redirect(url_for('blueprint_cool.admin_page'))
+                # Se a senha estiver incorreta
+                flash('Senha incorreta. Tente novamente.', 'danger')
+                return redirect(url_for('blueprint_cool.login'))
 
-                return redirect(url_for('blueprint_cool.home'))
+        # Se o usuário não foi encontrado
+        if not usuario_encontrado:
+            flash('Credenciais de usuários inválidas. Tente novamente.', 'danger')
+            return redirect(url_for('blueprint_cool.login'))
 
-        flash('Credenciais inválidas. Tente novamente.', 'danger')
-        return redirect(url_for('blueprint_cool.login'))
-
+    # Para GET
     return render_template("index.html")
 
 
@@ -80,9 +89,10 @@ def logout():
 @login_required
 def produtos():
     produtos = [
-        {'id': '1', 'nome': 'NVIDIA GeForce RTX 3060', 'preco': 2499.90},
-        {'id': '2', 'nome': 'AMD Radeon RX 6700 XT', 'preco': 2999.99},
-        {'id': '3', 'nome': 'NVIDIA GeForce GTX 1660 Super', 'preco': 1799.90}
+        {'id': '1', 'nome': 'NVIDIA GeForce RTX 3060', 'preco': 2499.90, 'image':'images/rtx3060.jpg'},
+        {'id': '2', 'nome': 'AMD Radeon RX 6700 XT', 'preco': 2999.99, 'image':'images/AMD Radeon RX 6700 XT.jfif'},
+        {'id': '4', 'nome': 'NVIDIA GeForce RTX 3090', 'preco': 2999.99, 'image':'images/NVIDIA GeForce RTX 3090.jfif'},
+        {'id': '3', 'nome': 'NVIDIA GeForce GTX 1660 Super', 'preco': 1799.90, 'image':'images/NVIDIA GeForce GTX 1660 Super.jfif'}
     ]
 
     return render_template("produtos.html", produtos=produtos)
@@ -109,7 +119,7 @@ def adicionar_ao_carrinho():
     return resp
 
 # Remover o carrinho
-@blueprint_default.route('/remover_carrinho')
+@blueprint_default.route('/remover_carrinho', methods=['POST'])
 @login_required
 def remover_carrinho():
     resp = make_response(redirect(url_for('blueprint_cool.produtos')))
@@ -127,9 +137,10 @@ def ver_carrinho():
 
     # Lista de produtos
     produtos = [
-        {'id': '1', 'nome': 'NVIDIA GeForce RTX 3060', 'preco': 2499.90},
-        {'id': '2', 'nome': 'AMD Radeon RX 6700 XT', 'preco': 2999.99},
-        {'id': '3', 'nome': 'NVIDIA GeForce GTX 1660 Super', 'preco': 1799.90}
+        {'id': '1', 'nome': 'NVIDIA GeForce RTX 3060', 'preco': 2499.90, 'image':'images/rtx3060.jpg'},
+        {'id': '2', 'nome': 'AMD Radeon RX 6700 XT', 'preco': 2999.99, 'image':'images/AMD Radeon RX 6700 XT.jfif'},
+        {'id': '4', 'nome': 'NVIDIA GeForce RTX 3090', 'preco': 2999.99, 'image':'images/NVIDIA GeForce RTX 3090.jfif'},
+        {'id': '3', 'nome': 'NVIDIA GeForce GTX 1660 Super', 'preco': 1799.90, 'image':'images/NVIDIA GeForce GTX 1660 Super.jfif'}
     ]
 
     # Criar um dicionário de produtos com o id como chave

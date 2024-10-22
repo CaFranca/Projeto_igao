@@ -10,14 +10,13 @@
     <div class="container">
         <h1>Digite aqui seu Login!</h1>
         
-        <!-- Exibir mensagens flash -->
         {% with messages = get_flashed_messages(with_categories=True) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">{{ message }}</div><br>  <!-- Exibe a mensagem sem lista -->
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert-{{ category }}">{{ message }}</div><br>  <!-- Exibe a mensagem sem lista -->
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
 
         <br><form action="{{ url_for('blueprint_cool.login') }}" method="post">
             <label for="login">Login:</label>

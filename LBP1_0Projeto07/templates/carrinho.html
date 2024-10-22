@@ -21,12 +21,15 @@
         </ul>
         <h3>Total: R$ {{ total }}</h3>
         <a href="{{ url_for('blueprint_cool.produtos') }}"><button type="button">Continuar Comprando</button></a>
+
+                <!-- Botão para remover o carrinho -->
+                <form action="{{ url_for('blueprint_cool.remover_carrinho') }}" method="post">
+                    <button type="submit">Esvaziar Carrinho</button>
+                </form>
+
         <a href="{{ url_for('blueprint_cool.logout') }}"><button type="button">Logout</button></a>
         
-        <!-- Botão para remover o carrinho -->
-        <form action="{{ url_for('blueprint_cool.remover_carrinho') }}" method="post">
-            <button type="submit">Esvaziar Carrinho</button>
-        </form>
+
     </div>
 </body>
 </html>
