@@ -65,6 +65,7 @@ def index():
 @blueprint_default.route('/home')
 @login_required
 def home():
+    flash('O login foi um sucesso', 'success')
     return render_template("sucesso.html")
 
 # Página do administrador
@@ -72,7 +73,7 @@ def home():
 @login_required
 @admin_required  # Adicionando a verificação de administrador
 def admin_page():
-    flash('A operação foi um sucesso', 'success')
+    flash('O login foi um sucesso', 'success')
     return render_template("sucesso.html")
 
 
@@ -81,7 +82,7 @@ def admin_page():
 @login_required
 def logout():
     session.pop('login', None)
-    flash('Você foi desconectado com sucesso!', 'info')
+    flash('Você foi desconectado com sucesso!', 'success')
     return redirect(url_for('blueprint_cool.login'))
 
 # Página de produtos
@@ -89,11 +90,15 @@ def logout():
 @login_required
 def produtos():
     produtos = [
-        {'id': '1', 'nome': 'NVIDIA GeForce RTX 3060', 'preco': 2499.90, 'image':'images/rtx3060.jpg'},
-        {'id': '2', 'nome': 'AMD Radeon RX 6700 XT', 'preco': 2999.99, 'image':'images/AMD Radeon RX 6700 XT.jfif'},
-        {'id': '4', 'nome': 'NVIDIA GeForce RTX 3090', 'preco': 2999.99, 'image':'images/NVIDIA GeForce RTX 3090.jfif'},
-        {'id': '3', 'nome': 'NVIDIA GeForce GTX 1660 Super', 'preco': 1799.90, 'image':'images/NVIDIA GeForce GTX 1660 Super.jfif'}
-    ]
+    {'id': '1', 'nome': 'NVIDIA GeForce RTX 3060', 'preco': 1799.90, 'image': 'images/rtx3060.jpg'},
+    {'id': '2', 'nome': 'AMD Radeon RX 6700 XT', 'preco': 2499.90, 'image': 'images/AMD Radeon RX 6700 XT.jfif'},
+    {'id': '3', 'nome': 'NVIDIA GeForce RTX 3090', 'preco': 4499.90, 'image': 'images/NVIDIA GeForce RTX 3090.jfif'},
+    {'id': '4', 'nome': 'AMD Radeon RX 6800 XT', 'preco': 3999.90, 'image': 'images/AMD Radeon RX 6800 XT.jpg'},
+    {'id': '5', 'nome': 'AMD Radeon RX 5500 XT', 'preco': 1399.90, 'image': 'images/AMD Radeon RX 5500 XT.jpg'},
+    {'id': '6', 'nome': 'NVIDIA GeForce GTX 1650', 'preco': 1099.90, 'image': 'images/NVIDIA GeForce GTX 1650.jfif'},
+    {'id': '7', 'nome': 'NVIDIA GeForce RTX 3080', 'preco': 3499.90, 'image': 'images/NVIDIA GeForce RTX 3080.jpg'},
+    {'id': '8', 'nome': 'NVIDIA GeForce GTX 1660 Super', 'preco': 1499.90, 'image': 'images/NVIDIA GeForce GTX 1660 Super.jfif'}
+]
 
     return render_template("produtos.html", produtos=produtos)
 
@@ -124,7 +129,7 @@ def adicionar_ao_carrinho():
 def remover_carrinho():
     resp = make_response(redirect(url_for('blueprint_cool.produtos')))
     resp.set_cookie('carrinho', '', expires=0)  # Remove o cookie do carrinho
-    flash('O carrinho foi esvaziado com sucesso!', 'info')
+    flash('O carrinho foi esvaziado com sucesso!', 'success')
     return resp
 
 
@@ -137,11 +142,16 @@ def ver_carrinho():
 
     # Lista de produtos
     produtos = [
-        {'id': '1', 'nome': 'NVIDIA GeForce RTX 3060', 'preco': 2499.90, 'image':'images/rtx3060.jpg'},
-        {'id': '2', 'nome': 'AMD Radeon RX 6700 XT', 'preco': 2999.99, 'image':'images/AMD Radeon RX 6700 XT.jfif'},
-        {'id': '4', 'nome': 'NVIDIA GeForce RTX 3090', 'preco': 2999.99, 'image':'images/NVIDIA GeForce RTX 3090.jfif'},
-        {'id': '3', 'nome': 'NVIDIA GeForce GTX 1660 Super', 'preco': 1799.90, 'image':'images/NVIDIA GeForce GTX 1660 Super.jfif'}
-    ]
+    {'id': '1', 'nome': 'NVIDIA GeForce RTX 3060', 'preco': 1799.90, 'image': 'images/rtx3060.jpg'},
+    {'id': '2', 'nome': 'AMD Radeon RX 6700 XT', 'preco': 2499.90, 'image': 'images/AMD Radeon RX 6700 XT.jfif'},
+    {'id': '3', 'nome': 'NVIDIA GeForce RTX 3090', 'preco': 4499.90, 'image': 'images/NVIDIA GeForce RTX 3090.jfif'},
+    {'id': '4', 'nome': 'AMD Radeon RX 6800 XT', 'preco': 3999.90, 'image': 'images/AMD Radeon RX 6800 XT.jpg'},
+    {'id': '5', 'nome': 'AMD Radeon RX 5500 XT', 'preco': 1399.90, 'image': 'images/AMD Radeon RX 5500 XT.jpg'},
+    {'id': '6', 'nome': 'NVIDIA GeForce GTX 1650', 'preco': 1099.90, 'image': 'images/NVIDIA GeForce GTX 1650.jfif'},
+    {'id': '7', 'nome': 'NVIDIA GeForce RTX 3080', 'preco': 3499.90, 'image': 'images/NVIDIA GeForce RTX 3080.jpg'},
+    {'id': '8', 'nome': 'NVIDIA GeForce GTX 1660 Super', 'preco': 1499.90, 'image': 'images/NVIDIA GeForce GTX 1660 Super.jfif'}
+]
+
 
     # Criar um dicionário de produtos com o id como chave
     produtos_dict = {produto['id']: produto for produto in produtos}

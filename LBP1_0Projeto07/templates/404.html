@@ -11,11 +11,13 @@
     <h1>404 - Página Não Encontrada</h1><br>
     {% with messages = get_flashed_messages(with_categories=True) %}
     {% if messages %}
+    <div class="flash-messages"> <!-- Div que envolve todas as mensagens flash -->
         {% for category, message in messages %}
-            <div class="alert-{{ category }}">{{ message }}</div><br>  <!-- Exibe a mensagem sem lista -->
+        <div class="alert alert-{{ category }}">{{ message }}</div>
         {% endfor %}
+    </div>
     {% endif %}
-{% endwith %}
+    {% endwith %}
     <a href="{{ url_for('blueprint_cool.index') }}"><button type="button">Voltar para a página inicial</button></a>
 </div>
 </body>

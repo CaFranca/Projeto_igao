@@ -12,12 +12,13 @@
         
         {% with messages = get_flashed_messages(with_categories=True) %}
         {% if messages %}
+        <div class="flash-messages"> <!-- Div que envolve todas as mensagens flash -->
             {% for category, message in messages %}
-                <div class="alert-{{ category }}">{{ message }}</div><br>  <!-- Exibe a mensagem sem lista -->
+            <div class="alert alert-{{ category }}">{{ message }}</div>
             {% endfor %}
+        </div>
         {% endif %}
-    {% endwith %}
-
+        {% endwith %}
         <br><form action="{{ url_for('blueprint_cool.login') }}" method="post">
             <label for="login">Login:</label>
             <input type="text" id="login" name="login" required>

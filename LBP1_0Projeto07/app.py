@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template,flash
 from controller.controller import blueprint_default as pagina
 from model.model import MeuMiddleware
 
@@ -18,6 +18,7 @@ app.wsgi_app = MeuMiddleware(app.wsgi_app)
 # Rota para tratar erro 404
 @app.errorhandler(404)
 def page_not_found(e):
+    flash('A url da pagina parece estar incorreta, tente voltar para a pagina de login','warning')
     return render_template('404.html'), 404
 
 @app.errorhandler(403)
