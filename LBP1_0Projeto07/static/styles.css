@@ -1,6 +1,6 @@
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #1b1b1b; /* Alterado para preto */
+    background-color: #24223f; /* Preto */
     display: flex;
     justify-content: center; 
     align-items: flex-start;
@@ -10,10 +10,10 @@ body {
 }
 
 .container {
-    background-color: #220544; /* roxo escuro */
+    background-color: #4f4c6c; 
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5); /* Sombras mais suaves */
+    box-shadow: 0px 0px 15px #3a3755;
     width: 100%;
     max-width: 1200px;
     color: #ffffff;
@@ -35,7 +35,7 @@ body {
 }
 
 .product-card {
-    background-color: #4a148c; /* Roxo escuro */
+    background-color: #4f4c6c; /* Roxo escuro */
     border-radius: 8px;  
     padding: 15px;  
     margin: 0 10px;
@@ -63,14 +63,14 @@ label, input, select, button {
 
 input, select {
     padding: 10px;
-    border: 1px solid #4a148c; /* Roxo escuro */
+    border: 1px solid #4f4c6c; /* Roxo escuro */
     border-radius: 5px;
     background-color: #ffffff;
-    color: #4a148c; /* Roxo escuro */
+    color: #4f4c6c; /* Roxo escuro */
 }
 
 button {
-    background-color: #0f68bbda; /* Azul escuro mais visível */
+    background-color: #0a3b66; /* Azul escuro */
     color: #ffffff;
     padding: 10px;
     border: none;
@@ -80,7 +80,7 @@ button {
 }
 
 button:hover {
-    background-color: #1565c0; /* Azul mais escuro ao passar o mouse */
+    background-color: #08335b; /* Azul mais escuro ao passar o mouse */
     transform: scale(1.05);  
 }
 
@@ -128,7 +128,7 @@ button:hover {
 }
 
 .product-card {
-    background-color: #4a148c; 
+    background-color: #24223f; 
     border-radius: 8px;  
     padding: 15px;  
     margin: 0 10px;
