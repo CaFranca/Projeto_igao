@@ -38,4 +38,5 @@ class Usuario:
 
 
 # Lista de usuários pré-definidos
-usuarios = [Usuario('admin', 'admin'), Usuario('Caique', 'aluno')]
+usuarios = [Usuario('admin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918'),
+            Usuario('Caique', 'a21d6f3803f0491c32444ef91a0836be243cc4da5186357e805b7009a5b0669b')]

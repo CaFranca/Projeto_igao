@@ -1,6 +1,8 @@
 from flask import Blueprint, render_template, request, session, redirect, url_for, make_response, flash,abort
 from model.model import usuarios
 import json; from functools import wraps;  from collections import defaultdict
+import hashlib
+
 blueprint_default = Blueprint("blueprint_cool", __name__)
 
 def login_required(f):
@@ -35,7 +37,10 @@ def login():
             if usuario.login == login:  # Se o login do usuário for encontrado
                 usuario_encontrado = True  # Usuário existe
                 
-                if usuario.senha == senha:  # Verifica se a senha está correta
+                # Criptografa a senha fornecida pelo usuário para comparação
+                senha_criptografada = hashlib.sha256(senha.encode()).hexdigest()
+                
+                if usuario.senha == senha_criptografada:  # Verifica se a senha está correta
                     session['login'] = login  # Armazena o login na sessão
                     
                     # Redireciona conforme o tipo de usuário
@@ -54,6 +59,7 @@ def login():
 
     # Para GET
     return render_template("index.html")
+
 
 
 # Página inicial
