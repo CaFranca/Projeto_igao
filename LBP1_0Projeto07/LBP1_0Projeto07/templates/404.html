@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href={{url_for('static', filename='styles.css' )}}>
+    <title>Página Não Encontrada</title>
+</head>
+<body>
+    <div class="container">
+    <h1>404 - Página Não Encontrada</h1><br>
+    {% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+    <div class="flash-messages"> <!-- Div que envolve todas as mensagens flash -->
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+    <a href="{{ url_for('blueprint_cool.index') }}"><button type="button">Voltar para a página inicial</button></a>
+</div>
+</body>
+</html>
