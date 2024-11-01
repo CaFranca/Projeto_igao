@@ -1,23 +1,22 @@
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #24223f; /* Preto */
+    background-color: #c5dcdf; 
     display: flex;
     justify-content: center; 
-    align-items: flex-start;
-    height: auto;
+    align-items: flex-start; /* Alinha o conteúdo no topo */
+    height: auto;          /* Permite que a altura se ajuste ao conteúdo */
     margin: 0;
-    padding: 20px;
+    padding: 20px;        /* Adiciona um pouco de espaçamento ao redor do conteúdo */
 }
 
 .container {
-    background-color: #4f4c6c; 
+    background-color: #0288d1; 
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0px 0px 15px #3a3755;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
     width: 100%;
-    max-width: 1200px;
-    color: #ffffff;
-    position: relative;
+    max-width: 1200px; /* Aumenta a largura máxima para caber mais produtos */
+    color: #ffffff; 
 }
 
 .container h1 {
@@ -28,20 +27,17 @@ body {
 }
 
 .product-grid {
-    display: flex;
-    transition: transform 0.5s ease-in-out;
-    width: 100%;
-    overflow: hidden;
+    display: grid;                /* Usando grid para organizar produtos */
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Colunas responsivas */
+    gap: 20px;                   /* Espaço entre os produtos */
 }
 
 .product-card {
-    background-color: #4f4c6c; /* Roxo escuro */
+    background-color: #03a9f4;  
     border-radius: 8px;  
     padding: 15px;  
-    margin: 0 10px;
     transition: transform 0.2s;  
-    text-align: center;         
-    width: 22%; 
+    text-align: center;          /* Centraliza texto dentro do card */
 }
 
 .product-card:hover {
@@ -49,28 +45,27 @@ body {
 }
 
 .product-image {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 5px;  
+    width: 100%;                 /* A imagem ocupa toda a largura do card */
+    height: auto;                /* Mantém a proporção da imagem */
+    border-radius: 5px;          /* Bordas arredondadas nas imagens */
 }
 
 label, input, select, button {
     display: block;
     width: 95%;
-    margin: 15px auto;
+    margin: 15px auto;         /* Centraliza inputs e botões */
 }
 
 input, select {
     padding: 10px;
-    border: 1px solid #4f4c6c; /* Roxo escuro */
+    border: 1px solid #0288d1;
     border-radius: 5px;
     background-color: #ffffff;
-    color: #4f4c6c; /* Roxo escuro */
+    color: #0288d1;
 }
 
 button {
-    background-color: #0a3b66; /* Azul escuro */
+    background-color: #01579b; 
     color: #ffffff;
     padding: 10px;
     border: none;
@@ -80,195 +75,28 @@ button {
 }
 
 button:hover {
-    background-color: #08335b; /* Azul mais escuro ao passar o mouse */
+    background-color: #013f72; 
     transform: scale(1.05);  
 }
 
-.prev, .next {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-10%);
-    background-color: rgba(0, 0, 0, 0.7); /* Preto com leve transparência */
-    color: white;
-    border: none;
-    padding: 20px;
-    cursor: pointer;
-    border-radius: 50%;
-    z-index: 10;
-    font-size: 24px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 50px;
-    height: 50px;
-}
-
-.prev {
-    left: 10px;
-}
-
-.next {
-    right: 10px;
-}
-
-.prev:hover, .next:hover {
-    background-color: rgba(255, 255, 255, 0.1); /* Leve cor branca ao passar o mouse */
-}
-
-.carousel-container {
-    position: relative;
-    overflow: hidden;
-    width: 100%;
-}
-
-.product-grid {
-    display: flex;
-    transition: transform 0.5s ease-in-out; 
-    width: fit-content; 
-}
-
-.product-card {
-    background-color: #24223f; 
-    border-radius: 8px;  
-    padding: 15px;  
-    margin: 0 10px;
-    transition: transform 0.2s;  
-    text-align: center;  
-    width: 25%; 
-}
-
-.prev, .next {
+/* Estilização adicional para mensagens */
+.alert-success, .alert-danger, .alert-warning {
     padding: 10px;
-    font-size: 16px;
-}
-
-@media (max-width: 768px) {
-    .product-card {
-        width: 45%; 
-    }
-
-    .prev, .next {
-        padding: 15px; 
-        font-size: 18px;
-    }
-}
-
-@media (max-width: 480px) {
-    .product-card {
-        width: 90%; 
-    }
-}
-
-@keyframes fade-in {
-    from {
-        opacity: 0;
-        transform: translateY(-10px); 
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0); 
-    }
-}
-
-@media (max-width: 768px) {
-    .alert {
-        font-size: 14px;
-        padding: 10px;
-    }
-}
-
-@media (max-width: 480px) {
-    .alert {
-        font-size: 12px;
-        padding: 8px;
-    }
-}
-
-.alert {
-    padding: 15px;
     border-radius: 5px;
-    margin-bottom: 20px;
-    font-size: 16px;
-    font-weight: bold;
-    width: 100%;
-    text-align: left; 
-    display: flex; 
-    align-items: center;
-    position: relative; 
-    animation: fade-in 0.5s ease-in-out; 
-}
-
-.alert::before {
-    content: "";
-    width: 30px; 
-    height: 100%; 
-    display: block;
-    transform: skew(-20deg); 
-    position: absolute;
-    left: 0;
-    top: 0;
-    border-radius: 5px 0 0 5px; 
+    margin-bottom: 15px;
 }
 
 .alert-success {
-    background-color: #388e3c; /* Verde escuro */
-    color: white;
-    animation: fade-in-out 3s ease-in-out forwards; 
-}
-
-.alert-success::before {
-    background-color: #4caf50; /* Verde para o paralelogramo do sucesso */
+    background-color: #4caf50; /* Verde */
+    color: #fff;
 }
 
 .alert-danger {
-    background-color: #d32f2f; /* Vermelho mais escuro para erro */
-    color: white;
-}
-
-.alert-danger::before {
-    background-color: #f44336; /* Vermelho para o paralelogramo do erro */
+    background-color: #f44336; /* Vermelho */
+    color: #fff;
 }
 
 .alert-warning {
-    background-color: #ff9800; /* Laranja para avisos */
-    color: white;
-}
-
-.alert-warning::before {
-    background-color: #f57c00; /* Laranja mais escuro para o paralelogramo do aviso */
-}
-
-@keyframes fade-in {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes fade-in-out {
-    0%, 80% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-}
-
-@media (max-width: 768px) {
-    .alert {
-        font-size: 14px;
-        padding: 10px;
-    }
-}
-
-@media (max-width: 480px) {
-    .alert {
-        font-size: 12px;
-        padding: 8px;
-    }
+    background-color: #ff9800; /* Laranja */
+    color: #fff;
 }
