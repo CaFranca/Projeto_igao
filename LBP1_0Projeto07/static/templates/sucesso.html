@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acesso de admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Bem-vindo {{ session['login'] | default(', visitante!') }}!</h1>
+
+        <!-- Exibir mensagens flash-->
+        {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div><br>  <!-- Exibe a mensagem sem lista -->
+            {% endfor %}
+
+        {% endif %}
+        {% endwith %}
+
+        <!-- Conteúdo da página-->
+        <a href="{{ url_for('blueprint_cool.produtos') }}"><button type="button">Produtos</button></a>
+        <a href="{{ url_for('blueprint_cool.logout') }}"><button type="button">Logout</button></a>
+
+    </div>
+
+</body>
+
+</html>

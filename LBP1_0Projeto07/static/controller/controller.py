@@ -1,10 +1,7 @@
 from flask import Blueprint, render_template, request, session, redirect, url_for, make_response, flash,abort
 from model.model import usuarios
 import json; from functools import wraps;  from collections import defaultdict
-import hashlib
-
 blueprint_default = Blueprint("blueprint_cool", __name__)
-
 
 def login_required(f):
     @wraps(f)
@@ -31,23 +28,14 @@ def login():
     if request.method == "POST":
         login = request.form["login"]
         senha = request.form["senha"]
-    
+
         usuario_encontrado = False  # Variável para verificar se o usuário existe
 
         for usuario in usuarios:
             if usuario.login == login:  # Se o login do usuário for encontrado
                 usuario_encontrado = True  # Usuário existe
                 
-                # Verifica o easter egg antes da criptografia da senha
-                if login == "Absolute" and senha == "Cinema":
-                    return render_template('easteregg.html', login=login)
-                elif (login=="#uta" and senha == "que"):
-                    return render_template('easteregg.html', login=login)
-
-                # Criptografa a senha fornecida pelo usuário para comparação
-                senha_criptografada = hashlib.sha256(senha.encode()).hexdigest()
-                
-                if usuario.senha == senha_criptografada:  # Verifica se a senha está correta
+                if usuario.senha == senha:  # Verifica se a senha está correta
                     session['login'] = login  # Armazena o login na sessão
                     
                     # Redireciona conforme o tipo de usuário
@@ -68,8 +56,6 @@ def login():
     return render_template("index.html")
 
 
-
-
 # Página inicial
 @blueprint_default.route("/")
 def index():
@@ -79,7 +65,6 @@ def index():
 @blueprint_default.route('/home')
 @login_required
 def home():
-    flash('O login foi um sucesso', 'success')
     return render_template("sucesso.html")
 
 # Página do administrador
@@ -87,7 +72,7 @@ def home():
 @login_required
 @admin_required  # Adicionando a verificação de administrador
 def admin_page():
-    flash('O login foi um sucesso', 'success')
+    flash('A operação foi um sucesso', 'success')
     return render_template("sucesso.html")
 
 
@@ -96,7 +81,7 @@ def admin_page():
 @login_required
 def logout():
     session.pop('login', None)
-    flash('Você foi desconectado com sucesso!', 'success')
+    flash('Você foi desconectado com sucesso!', 'info')
     return redirect(url_for('blueprint_cool.login'))
 
 # Página de produtos
@@ -104,15 +89,11 @@ def logout():
 @login_required
 def produtos():
     produtos = [
-    {'id': '1', 'nome': 'NVIDIA GeForce RTX 3060', 'preco': 1799.90, 'image': 'images/rtx3060.jpg'},
-    {'id': '2', 'nome': 'AMD Radeon RX 6700 XT', 'preco': 2499.90, 'image': 'images/AMD Radeon RX 6700 XT.jfif'},
-    {'id': '3', 'nome': 'NVIDIA GeForce RTX 3090', 'preco': 4499.90, 'image': 'images/NVIDIA GeForce RTX 3090.jfif'},
-    {'id': '4', 'nome': 'AMD Radeon RX 6800 XT', 'preco': 3999.90, 'image': 'images/AMD Radeon RX 6800 XT.jpg'},
-    {'id': '5', 'nome': 'AMD Radeon RX 5500 XT', 'preco': 1399.90, 'image': 'images/AMD Radeon RX 5500 XT.jpg'},
-    {'id': '6', 'nome': 'NVIDIA GeForce GTX 1650', 'preco': 1099.90, 'image': 'images/NVIDIA GeForce GTX 1650.jfif'},
-    {'id': '7', 'nome': 'NVIDIA GeForce RTX 3080', 'preco': 3499.90, 'image': 'images/NVIDIA GeForce RTX 3080.jpg'},
-    {'id': '8', 'nome': 'NVIDIA GeForce GTX 1660 Super', 'preco': 1499.90, 'image': 'images/NVIDIA GeForce GTX 1660 Super.jfif'}
-]
+        {'id': '1', 'nome': 'NVIDIA GeForce RTX 3060', 'preco': 2499.90, 'image':'images/rtx3060.jpg'},
+        {'id': '2', 'nome': 'AMD Radeon RX 6700 XT', 'preco': 2999.99, 'image':'images/AMD Radeon RX 6700 XT.jfif'},
+        {'id': '4', 'nome': 'NVIDIA GeForce RTX 3090', 'preco': 2999.99, 'image':'images/NVIDIA GeForce RTX 3090.jfif'},
+        {'id': '3', 'nome': 'NVIDIA GeForce GTX 1660 Super', 'preco': 1799.90, 'image':'images/NVIDIA GeForce GTX 1660 Super.jfif'}
+    ]
 
     return render_template("produtos.html", produtos=produtos)
 
@@ -133,7 +114,7 @@ def adicionar_ao_carrinho():
     
     # Converte de volta para JSON e define no cookie com segurança extra
     resp = make_response(redirect(url_for('blueprint_cool.produtos')))
-    resp.set_cookie('carrinho', json.dumps(carrinho), max_age=60*24, secure=True, httponly=True, samesite='Lax')  # Mais seguro
+    resp.set_cookie('carrinho', json.dumps(carrinho), max_age=60*60*24, secure=True, httponly=True, samesite='Lax')  # Mais seguro
     
     return resp
 
@@ -143,7 +124,7 @@ def adicionar_ao_carrinho():
 def remover_carrinho():
     resp = make_response(redirect(url_for('blueprint_cool.produtos')))
     resp.set_cookie('carrinho', '', expires=0)  # Remove o cookie do carrinho
-    flash('O carrinho foi esvaziado com sucesso!', 'success')
+    flash('O carrinho foi esvaziado com sucesso!', 'info')
     return resp
 
 
@@ -156,16 +137,11 @@ def ver_carrinho():
 
     # Lista de produtos
     produtos = [
-    {'id': '1', 'nome': 'NVIDIA GeForce RTX 3060', 'preco': 1799.90, 'image': 'images/rtx3060.jpg'},
-    {'id': '2', 'nome': 'AMD Radeon RX 6700 XT', 'preco': 2499.90, 'image': 'images/AMD Radeon RX 6700 XT.jfif'},
-    {'id': '3', 'nome': 'NVIDIA GeForce RTX 3090', 'preco': 4499.90, 'image': 'images/NVIDIA GeForce RTX 3090.jfif'},
-    {'id': '4', 'nome': 'AMD Radeon RX 6800 XT', 'preco': 3999.90, 'image': 'images/AMD Radeon RX 6800 XT.jpg'},
-    {'id': '5', 'nome': 'AMD Radeon RX 5500 XT', 'preco': 1399.90, 'image': 'images/AMD Radeon RX 5500 XT.jpg'},
-    {'id': '6', 'nome': 'NVIDIA GeForce GTX 1650', 'preco': 1099.90, 'image': 'images/NVIDIA GeForce GTX 1650.jfif'},
-    {'id': '7', 'nome': 'NVIDIA GeForce RTX 3080', 'preco': 3499.90, 'image': 'images/NVIDIA GeForce RTX 3080.jpg'},
-    {'id': '8', 'nome': 'NVIDIA GeForce GTX 1660 Super', 'preco': 1499.90, 'image': 'images/NVIDIA GeForce GTX 1660 Super.jfif'}
-]
-
+        {'id': '1', 'nome': 'NVIDIA GeForce RTX 3060', 'preco': 2499.90, 'image':'images/rtx3060.jpg'},
+        {'id': '2', 'nome': 'AMD Radeon RX 6700 XT', 'preco': 2999.99, 'image':'images/AMD Radeon RX 6700 XT.jfif'},
+        {'id': '4', 'nome': 'NVIDIA GeForce RTX 3090', 'preco': 2999.99, 'image':'images/NVIDIA GeForce RTX 3090.jfif'},
+        {'id': '3', 'nome': 'NVIDIA GeForce GTX 1660 Super', 'preco': 1799.90, 'image':'images/NVIDIA GeForce GTX 1660 Super.jfif'}
+    ]
 
     # Criar um dicionário de produtos com o id como chave
     produtos_dict = {produto['id']: produto for produto in produtos}

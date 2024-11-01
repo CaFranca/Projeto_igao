@@ -1,4 +1,4 @@
-from flask import Flask, render_template,flash
+from flask import Flask, render_template
 from controller.controller import blueprint_default as pagina
 from model.model import MeuMiddleware
 
@@ -9,15 +9,15 @@ app.secret_key = 'top_seguranca'  # Defina uma chave secreta para a sessão
 app.config['SESSION_COOKIE_HTTPONLY'] = True  # Protege contra XSS
 app.config['SESSION_COOKIE_SECURE'] = True  # Só envia o cookie via HTTPS
 
-
+# Registrar o Blueprint
 app.register_blueprint(pagina)
 
+# Registrar o middleware
 app.wsgi_app = MeuMiddleware(app.wsgi_app)
 
-
+# Rota para tratar erro 404
 @app.errorhandler(404)
 def page_not_found(e):
-    flash('A url da pagina parece estar incorreta, tente voltar para a pagina de login','warning')
     return render_template('404.html'), 404
 
 @app.errorhandler(403)
