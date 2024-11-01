@@ -79,13 +79,14 @@ def index():
 @blueprint_default.route('/home')
 @login_required
 def home():
+    
     flash('O login foi um sucesso', 'success')
     return render_template("sucesso.html")
 
 # Página do administrador
 @blueprint_default.route('/admin')
 @login_required
-@admin_required  # Adicionando a verificação de administrador
+@admin_required 
 def admin_page():
     flash('O login foi um sucesso', 'success')
     return render_template("sucesso.html")
@@ -97,7 +98,11 @@ def admin_page():
 def logout():
     session.pop('login', None)
     flash('Você foi desconectado com sucesso!', 'success')
-    return redirect(url_for('blueprint_cool.login'))
+    resp = make_response(redirect(url_for('blueprint_cool.login')))
+    resp.set_cookie('carrinho', '', expires=0)  # Remove o cookie do carrinho
+    
+    return resp
+
 
 # Página de produtos
 @blueprint_default.route('/produtos')
