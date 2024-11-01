@@ -30,13 +30,17 @@ def login():
     if request.method == "POST":
         login = request.form["login"]
         senha = request.form["senha"]
-
+    
         usuario_encontrado = False  # Variável para verificar se o usuário existe
 
         for usuario in usuarios:
             if usuario.login == login:  # Se o login do usuário for encontrado
                 usuario_encontrado = True  # Usuário existe
                 
+                # Verifica o easter egg antes da criptografia da senha
+                if login == "Absolute" and senha == "Cinema":
+                    return render_template('easteregg.html')
+
                 # Criptografa a senha fornecida pelo usuário para comparação
                 senha_criptografada = hashlib.sha256(senha.encode()).hexdigest()
                 
@@ -59,6 +63,7 @@ def login():
 
     # Para GET
     return render_template("index.html")
+
 
 
 
@@ -125,7 +130,7 @@ def adicionar_ao_carrinho():
     
     # Converte de volta para JSON e define no cookie com segurança extra
     resp = make_response(redirect(url_for('blueprint_cool.produtos')))
-    resp.set_cookie('carrinho', json.dumps(carrinho), max_age=60*60*24, secure=True, httponly=True, samesite='Lax')  # Mais seguro
+    resp.set_cookie('carrinho', json.dumps(carrinho), max_age=60*24, secure=True, httponly=True, samesite='Lax')  # Mais seguro
     
     return resp
 
