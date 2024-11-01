@@ -38,7 +38,9 @@ class Usuario:
 
 
 # Lista de usuários pré-definidos
-usuarios = [Usuario('admin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918'),
-            Usuario('Caique', 'a21d6f3803f0491c32444ef91a0836be243cc4da5186357e805b7009a5b0669b'),
-            Usuario('Absolute', "89ec0bb81771a4212cb70663681fbe4f990f4aeea8fd455fe6ed5bd0badce2fa"),
-            Usuario('#uta', 'c57b7501cd843672550c711a346dd93e9bdc2c97a640874d54b4c9cf4b12ee81')]
+usuarios = [Usuario('admin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918'),    #Senha: admin
+            Usuario('Caique', 'a21d6f3803f0491c32444ef91a0836be243cc4da5186357e805b7009a5b0669b'),   #Senha: aluno
+            Usuario('Absolute', "89ec0bb81771a4212cb70663681fbe4f990f4aeea8fd455fe6ed5bd0badce2fa"), #Senha: Cinema
+            Usuario('#uta', 'c57b7501cd843672550c711a346dd93e9bdc2c97a640874d54b4c9cf4b12ee81'),     #Senha: que
+            Usuario("Igão", "06e8031c36c654faaceb1954d6a052da31b974fe0b0f56fa09762a293e097c31"),     #Senha: LPB1
+            Usuario("Igor", "06e8031c36c654faaceb1954d6a052da31b974fe0b0f56fa09762a293e097c31")]     #Senha: LPB1
